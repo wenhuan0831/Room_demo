@@ -4,19 +4,19 @@ room的多表使用
 
 具体使用：
 1.引入
-首先在project的gradle文件中添加 Google Maven 仓库
-allprojects {
-    repositories {
-        jcenter()
-        google()
-    }
-}
+首先在project的gradle文件中添加 Google Maven 仓库    
+allprojects {    
+    repositories {    
+        jcenter()    
+        google()    
+    }    
+}    
 
-然后在APP的gradle文件中添加依赖
-    // Room (use 1.1.0-beta2 for latest beta)
-    implementation "android.arch.persistence.room:runtime:1.0.0"
-    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
-2.三大组成部分
+然后在APP的gradle文件中添加依赖    
+    // Room (use 1.1.0-beta2 for latest beta)    
+    implementation "android.arch.persistence.room:runtime:1.0.0"    
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"    
+2.三大组成部分    
 Room由三大部分组成
 
 Entity：数据库中表对应的Java实体
@@ -27,11 +27,11 @@ Database：创建数据库
 Entity就是一般的Java实体类
 这里只涉及到@Entity、 @PrimaryKey，2个注解。其实有其他好多注解，比如 @ColumnInfo（列名）、 @ForeignKey（外键）、@Index（索引）等等，具体用法还是看官方文档好点
 @Entity
-public class UserEntity {
-    @PrimaryKey(autoGenerate = true)
-    private int uid;
-    private String name;
-    private String address;
+public class UserEntity {    
+    @PrimaryKey(autoGenerate = true)    
+    private int uid;    
+    private String name;    
+    private String address;    
 
     public String getAddress() {
         return address;
@@ -71,11 +71,11 @@ public class UserEntity {
 DAO的话就是创建一些访问数据库的方法
 通过注解的方式实现增（@Insert）删（@Delete）改（@Update）查（@Query）
 可以通过“:xxx”的方式引入参数
-
-@Dao
-public interface UserDao {
+    
+@Dao    
+public interface UserDao {    
     @Insert
-    void insert(UserEntity userEntity);
+    void insert(UserEntity userEntity);    
 
     @Insert
     void insertAll(List<UserEntity> userEntities);
@@ -97,10 +97,10 @@ public interface UserDao {
 }
 
 2.3 Database
-上面两个文件建好后，就可以创建数据库了
-要在里面声明你创建的DAO：public abstract UserDao userDao();
-多表创建的数据库样式，相应只需多创建一个BookDao及BooKEntity，然后具体数据库的创建如下：
-@Database(entities = {UserEntity.class, BookEntity.class}, version = 2, exportSchema = false)
+上面两个文件建好后，就可以创建数据库了    
+要在里面声明你创建的DAO：public abstract UserDao userDao();    
+多表创建的数据库样式，相应只需多创建一个BookDao及BooKEntity，然后具体数据库的创建如下：    
+@Database(entities = {UserEntity.class, BookEntity.class}, version = 2, exportSchema = false)        
 public abstract class AppDataBase extends RoomDatabase {
 
     private static final String DB_NAME = "data_base.db";
@@ -140,24 +140,24 @@ public abstract class AppDataBase extends RoomDatabase {
         }
     };
 3数据库升级
-数据库升级要创建Migration类，在migrate方法中添加改变的SQL语句，然后version加1
-static final Migration MIGRATION_1_2 = new Migration(1, 2) {
-        @Override
-        public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE 'book_table' (`bookId` TEXT, "
-                    + "`name` TEXT,'publish' TEXT, PRIMARY KEY(`bookId`))");
-        }
-    };
+数据库升级要创建Migration类，在migrate方法中添加改变的SQL语句，然后version加1    
+static final Migration MIGRATION_1_2 = new Migration(1, 2) {    
+        @Override    
+        public void migrate(SupportSQLiteDatabase database) {    
+            database.execSQL("CREATE TABLE 'book_table' (`bookId` TEXT, "    
+                    + "`name` TEXT,'publish' TEXT, PRIMARY KEY(`bookId`))");    
+        }    
+    };    
 
 在build()之前添加addMigrations
-return Room.databaseBuilder(appContext, AppDatabase.class, DATABASE_NAME)
-                .addMigrations(MIGRATION_1_2)
-                .build();
-
-@Database(entities = {UserEntity.class},version = 2)
+return Room.databaseBuilder(appContext, AppDatabase.class, DATABASE_NAME)    
+                .addMigrations(MIGRATION_1_2)    
+                .build();    
+    
+@Database(entities = {UserEntity.class},version = 2)    
 
 4访问数据库
-三大组件创建好，你就可以使用数据库啦
+三大组件创建好，你就可以使用数据库啦    
 AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
