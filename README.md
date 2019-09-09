@@ -1,6 +1,6 @@
 # Room_demo
 room的多表使用    
-数据库的选型： http://km.oa.com/group/1719/articles/show/362288?kmref=search&from_page=1&no=2               
+数据库的选型：http://andyken.github.io/2017/10/26/Android%E6%B5%81%E8%A1%8CORM%E6%A1%86%E6%9E%B6%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94%E5%8F%8ARoom%E8%B8%A9%E5%9D%91%E6%80%BB%E7%BB%93/              
 
 具体使用：
 1.引入
